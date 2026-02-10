@@ -1,0 +1,94 @@
+name: CI
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test-cpp:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y cmake ninja-build
+          
+      - name: Build C++ Engine
+        run: |
+          cd src/physics-engine
+          mkdir -p build && cd build
+          cmake .. -GNinja
+          ninja
+          
+      - name: Run C++ tests
+        run: |
+          cd src/physics-engine/build
+          ctest --output-on-failure
+
+  test-rust:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Install Rust
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          
+      - name: Build Rust
+        run: cd src/nervous-system && cargo build --release
+        
+      - name: Run Rust tests
+        run: cd src/nervous-system && cargo test
+
+  test-python:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+          
+      - name: Install dependencies
+        run: |
+          cd src/cognitive-lab
+          pip install -r requirements.txt
+          
+      - name: Run Python tests
+        run: |
+          cd src/cognitive-lab
+          pytest -v
+
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Install Rust
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          components: clippy
+          
+      - name: Run clippy
+        run: cd src/nervous-system && cargo clippy -- -D warnings
+        
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+          
+      - name: Install Python linters
+        run: pip install pylint black
+        
+      - name: Run Python linters
+        run: |
+          cd src/cognitive-lab
+          black --check .
+          pylint **/*.py

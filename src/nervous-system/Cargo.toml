@@ -1,0 +1,73 @@
+[package]
+name = "tensorwerk-nervous-system"
+version = "1.0.0"
+edition = "2021"
+authors = ["tensorwerk Finance Team"]
+description = "Sistema nervoso de alta performance - ingestão zero-copy e validação de integridade"
+license = "MIT"
+
+[dependencies]
+# Zero-copy networking e parsing
+tokio = { version = "1.35", features = ["full", "net", "rt-multi-thread"] }
+tokio-util = { version = "0.7", features = ["codec"] }
+bytes = "1.5"
+
+# Serialização/deserialização zero-copy
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+rmp-serde = "1.1"  # MessagePack (binário)
+
+# FFI (Foreign Function Interface) para C++ e Python
+libc = "0.2"
+cbindgen = "0.26"
+
+# Concorrência e sincronização lock-free
+crossbeam = "0.8"
+crossbeam-channel = "0.5"
+parking_lot = "0.12"  # Mutex/RwLock mais rápido que std
+
+# Log estruturado
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+
+# Métricas e monitoramento
+prometheus = "0.13"
+metrics = "0.21"
+
+# Redes tolerantes a falhas
+async-trait = "0.1"
+thiserror = "1.0"
+
+# CUDA FFI
+cudarc = { version = "0.10", optional = true }
+
+[dev-dependencies]
+criterion = "0.5"
+proptest = "1.4"
+quickcheck = "1.0"
+
+[features]
+default = []
+cuda = ["cudarc"]
+fuzzing = []
+
+[lib]
+name = "tensorwerk_nervous"
+crate-type = ["cdylib", "staticlib", "rlib"]
+
+[[bin]]
+name = "tensorwerk-ingestor"
+path = "src/ingestion/main.rs"
+
+
+
+[profile.release]
+opt-level = 3
+lto = "fat"
+codegen-units = 1
+panic = "abort"
+strip = true
+
+[profile.bench]
+inherits = "release"
+debug = true

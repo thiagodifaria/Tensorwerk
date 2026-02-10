@@ -1,0 +1,106 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://thiagodifaria.github.io/schemas/market_data.json",
+  "title": "MarketData",
+  "description": "Schema para dados de mercado financeiro (trades, quotes, orderbook)",
+  "type": "object",
+  "properties": {
+    "timestamp": {
+      "type": "integer",
+      "description": "Unix timestamp em milissegundos desde epoch",
+      "minimum": 0,
+      "maximum": 4102444800000
+    },
+    "symbol": {
+      "type": "string",
+      "description": "Símbolo do ativo (ex: BTCUSD, AAPL)",
+      "pattern": "^[A-Z]{2,6}[A-Z]{2,4}$",
+      "minLength": 4,
+      "maxLength": 10
+    },
+    "price": {
+      "type": "number",
+      "description": "Preço de execução ou cotação",
+      "minimum": 0,
+      "exclusiveMinimum": 0
+    },
+    "volume": {
+      "type": "number",
+      "description": "Quantidade executada ou disponível",
+      "minimum": 0
+    },
+    "bid_price": {
+      "type": "number",
+      "description": "Melhor preço de compra (para quotes)",
+      "minimum": 0
+    },
+    "ask_price": {
+      "type": "number",
+      "description": "Melhor preço de venda (para quotes)",
+      "minimum": 0
+    },
+    "bid_volume": {
+      "type": "number",
+      "description": "Volume na melhor compra",
+      "minimum": 0
+    },
+    "ask_volume": {
+      "type": "number",
+      "description": "Volume na melhor venda",
+      "minimum": 0
+    },
+    "side": {
+      "type": "string",
+      "description": "Direção da ordem",
+      "enum": [
+        "BUY",
+        "SELL",
+        "UNKNOWN"
+      ]
+    },
+    "curvature": {
+      "type": "number",
+      "description": "Curvatura escalar local (calculada pelo motor C++)"
+    },
+    "liquidity_density": {
+      "type": "number",
+      "description": "Densidade de liquidez no ponto",
+      "minimum": 0
+    }
+  },
+  "required": [
+    "timestamp",
+    "symbol",
+    "price"
+  ],
+  "anyOf": [
+    {
+      "required": [
+        "volume"
+      ]
+    },
+    {
+      "required": [
+        "bid_price",
+        "ask_price"
+      ]
+    }
+  ],
+  "examples": [
+    {
+      "timestamp": 1704067200000,
+      "symbol": "BTCUSD",
+      "price": 43250.50,
+      "volume": 1.25,
+      "side": "BUY"
+    },
+    {
+      "timestamp": 1704067200000,
+      "symbol": "ETHUSD",
+      "bid_price": 2280.00,
+      "ask_price": 2280.50,
+      "bid_volume": 5.0,
+      "ask_volume": 3.2
+    }
+  ]
+}

@@ -1,0 +1,1 @@
+/mnt/c/Users/thiag/PROJETOS/Tensorwerk/src/physics-engine/asm/avx512_kernels.asm:237: error: parser: instruction expected
