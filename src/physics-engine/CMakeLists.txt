@@ -52,4 +52,12 @@ if(CUDAToolkit_FOUND)
 endif()
 
 # Installation
+# Installation
 install(TARGETS tensorwerk_engine DESTINATION bin)
+
+# Testing
+enable_testing()
+add_executable(unit_tests tests/unit_test.cpp)
+target_include_directories(unit_tests PRIVATE src)
+add_test(NAME AlgebraTest COMMAND unit_tests)
+

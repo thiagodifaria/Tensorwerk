@@ -1,6 +1,9 @@
 import type { Metadata } from 'next';
+import './globals.css';
 
 export const metadata: Metadata = {
+
+
     title: 'Tensorwerk — Riemannian Market Visualization',
     description: 'Real-time 4D manifold visualization of financial market dynamics using Riemannian geometry.',
 };
@@ -18,7 +21,6 @@ export default function RootLayout({
                 backgroundColor: '#0a0a0f',
                 color: '#e0e0e0',
                 fontFamily: "'JetBrains Mono', 'Fira Code', monospace",
-                overflow: 'hidden',
             }}>
                 {children}
             </body>
