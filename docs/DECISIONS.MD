@@ -10,10 +10,6 @@ Formato baseado em [Architecture Decision Records (ADR)](https://adr.github.io/)
 
 ## ADR-001: Modelar Mercado como Variedade Riemanniana
 
-**Status**: Aceito
-**Data**: 2025-01-15
-**Decisão por**: Thiago Di Faria
-
 ### Contexto
 
 Modelos financeiros tradicionais (Black-Scholes, GBM, etc) tratam o mercado como um processo estocástico unidimensional com ruído gaussiano. Esses modelos falham catastroficamente em crises porque:
@@ -432,4 +428,3 @@ Python usa **Pydantic** para validação de tipos em runtime.
 **Fim dos ADRs**
 
 **Autor**: Thiago Di Faria — [thiagodifaria@gmail.com](mailto:thiagodifaria@gmail.com)
-Última atualização: 2025
